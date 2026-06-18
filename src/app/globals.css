@@ -1,0 +1,234 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ════════════════════════════════════════════════════════════════════════════
+   FLEX ASSISTANT — Global Styles
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Design tokens ────────────────────────────────────────────────────────── */
+:root {
+  --amber:       #EF9F27;
+  --amber-lt:    #FAEEDA;
+  --amber-dk:    #633806;
+  --teal:        #1D9E75;
+  --teal-lt:     #E1F5EE;
+  --teal-dk:     #085041;
+  --danger:      #E24B4A;
+  --danger-lt:   #FCEBEB;
+
+  --surface:     #ffffff;
+  --bg:          #f5f4f0;
+  --border:      rgba(0, 0, 0, 0.10);
+  --text-1:      #1a1a1a;
+  --text-2:      #555555;
+  --text-3:      #888888;
+
+  --radius:      12px;
+  --radius-sm:   8px;
+  --radius-xs:   6px;
+
+  /* Transition presets */
+  --t-fast:      0.12s ease;
+  --t-base:      0.2s ease;
+  --t-slow:      0.35s ease;
+
+  /* Safe area insets (populated by JS on mount for older Safari) */
+  --sat:  env(safe-area-inset-top, 0px);
+  --sab:  env(safe-area-inset-bottom, 0px);
+  --sal:  env(safe-area-inset-left, 0px);
+  --sar:  env(safe-area-inset-right, 0px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface:  #1e1e1b;
+    --bg:       #161614;
+    --border:   rgba(255, 255, 255, 0.10);
+    --text-1:   #f0ede6;
+    --text-2:   #aaaaaa;
+    --text-3:   #606060;
+  }
+}
+
+/* ── Resets ───────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  /* Prevent layout shift on iOS when keyboard opens */
+  height: -webkit-fill-available;
+  /* Smooth scrolling across the whole page */
+  scroll-behavior: smooth;
+  /* Prevent iOS font inflation */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100dvh;
+  min-height: -webkit-fill-available;
+  background: var(--bg);
+  color: var(--text-1);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+               Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Prevent overscroll bounce from feeling glitchy */
+  overscroll-behavior-y: none;
+}
+
+/* ── Typography ───────────────────────────────────────────────────────────── */
+h1, h2, h3, h4 { margin: 0; line-height: 1.2; }
+p { margin: 0; }
+
+/* ── Interactive states ───────────────────────────────────────────────────── */
+
+/* Tap-friendly active scale for all buttons */
+button:active:not(:disabled) {
+  transform: scale(0.97);
+  opacity: 0.85;
+  transition: transform var(--t-fast), opacity var(--t-fast);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* Consistent focus ring — keyboard accessible, not visible on tap */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+/* Remove default outline; components manage their own focus styles */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+}
+
+/* Input focus border highlight */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--amber) !important;
+  box-shadow: 0 0 0 3px rgba(239, 159, 39, 0.15);
+}
+
+/* Remove iOS input styling */
+input[type="text"],
+input[type="search"],
+input[type="email"],
+textarea,
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: var(--radius-sm);
+}
+
+/* Prevent search input clear button on Chrome */
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+/* Remove number input spinners */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ── Tap highlight ────────────────────────────────────────────────────────── */
+a, button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Skeleton loading shimmer ─────────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--border) 25%,
+    var(--bg) 50%,
+    var(--border) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Spinner ──────────────────────────────────────────────────────────────── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid var(--border);
+  border-top-color: var(--amber);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+.spinner-sm {
+  width: 14px;
+  height: 14px;
+  border-width: 2px;
+}
+
+/* ── Fade-in animation for page content ───────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up {
+  animation: fadeUp 0.22s ease both;
+}
+
+/* Staggered children */
+.fade-up:nth-child(1) { animation-delay: 0ms;  }
+.fade-up:nth-child(2) { animation-delay: 40ms; }
+.fade-up:nth-child(3) { animation-delay: 80ms; }
+.fade-up:nth-child(4) { animation-delay: 120ms; }
+
+/* ── Utility classes ──────────────────────────────────────────────────────── */
+.surface {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Bottom-safe padding for fixed bottom navs / buttons */
+.pb-safe {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+}
+
+/* ── Scrollbar (desktop only — invisible on mobile) ───────────────────────── */
+@media (pointer: fine) {
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 99px;
+  }
+}
