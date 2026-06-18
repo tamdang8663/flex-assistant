@@ -3,9 +3,5 @@
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
-  "env": {
-    "ANTHROPIC_API_KEY": "@anthropic-api-key",
-    "GOOGLE_MAPS_API_KEY": "@google-maps-api-key",
-    "ORS_API_KEY": "@ors-api-key"
-  }
+  
 }
